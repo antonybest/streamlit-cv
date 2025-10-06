@@ -140,11 +140,17 @@ st.markdown("---")
 if REPORTLAB_AVAILABLE:
     pdf_buffer = BytesIO()
 
-    doc = BaseDocTemplate(pdf_buffer, pagesize=A4, leftMargin=40, rightMargin=40, topMargin=40, bottomMargin=40)
+    doc = BaseDocTemplate(pdf_buffer, pagesize=A4, leftMargin=50, rightMargin=50, topMargin=50, bottomMargin=50)
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name='SectionHeader', fontSize=13, leading=16, spaceAfter=10, fontName='Helvetica-Bold'))
-    styles.add(ParagraphStyle(name='Body', fontSize=10, leading=14))
-    styles.add(ParagraphStyle(name='ListItem', fontSize=10, leading=12, leftIndent=15))
+    
+    # Enhanced styling for better visual appeal
+    styles.add(ParagraphStyle(name='Title', fontSize=18, leading=22, spaceAfter=12, fontName='Helvetica-Bold', textColor='#2c3e50'))
+    styles.add(ParagraphStyle(name='SectionHeader', fontSize=14, leading=18, spaceAfter=8, spaceBefore=12, fontName='Helvetica-Bold', textColor='#34495e'))
+    styles.add(ParagraphStyle(name='Body', fontSize=10, leading=14, spaceAfter=6, fontName='Helvetica'))
+    styles.add(ParagraphStyle(name='ListItem', fontSize=10, leading=12, leftIndent=20, fontName='Helvetica'))
+    styles.add(ParagraphStyle(name='Contact', fontSize=10, leading=12, spaceAfter=8, fontName='Helvetica', textColor='#7f8c8d'))
+    styles.add(ParagraphStyle(name='JobTitle', fontSize=11, leading=14, spaceAfter=4, fontName='Helvetica-Bold', textColor='#2c3e50'))
+    styles.add(ParagraphStyle(name='Company', fontSize=10, leading=12, spaceAfter=6, fontName='Helvetica', textColor='#7f8c8d'))
 
     # Define two-column layout
     frame_left = Frame(doc.leftMargin, doc.bottomMargin, (A4[0] - 100) / 2, A4[1] - 100, id='left')
@@ -154,10 +160,11 @@ if REPORTLAB_AVAILABLE:
     story = []
 
     # LEFT COLUMN: Summary + Experience + Education
-    story.append(Paragraph("Antony Best - Data Engineer", styles['Title']))
-    story.append(Paragraph("Email: antony.best@googlemail.com", styles['Body']))
-    story.append(Paragraph("Phone: 07891 664159", styles['Body']))
-    story.append(Spacer(1, 12))
+    story.append(Paragraph("Antony Best", styles['Title']))
+    story.append(Paragraph("Data Engineer", styles['SectionHeader']))
+    story.append(Paragraph("📧 antony.best@googlemail.com", styles['Contact']))
+    story.append(Paragraph("📱 07891 664159", styles['Contact']))
+    story.append(Spacer(1, 16))
 
     story.append(Paragraph("Professional Summary", styles['SectionHeader']))
     story.append(Paragraph(summary_text, styles['Body']))
@@ -165,24 +172,56 @@ if REPORTLAB_AVAILABLE:
 
     story.append(Paragraph("Work Experience", styles['SectionHeader']))
     for job in experience:
-        story.append(Paragraph(f"<b>{job['role']}</b>", styles['Body']))
+        # Split role and company/date
+        role_parts = job['role'].split(' | ')
+        if len(role_parts) == 2:
+            role_title = role_parts[0]
+            company_date = role_parts[1]
+        else:
+            role_title = job['role']
+            company_date = ""
+        
+        story.append(Paragraph(role_title, styles['JobTitle']))
+        if company_date:
+            story.append(Paragraph(company_date, styles['Company']))
         story.append(ListFlowable(
             [ListItem(Paragraph(item, styles['ListItem'])) for item in job["details"]],
             bulletType='bullet'
         ))
-        story.append(Spacer(1, 8))
+        story.append(Spacer(1, 10))
 
     story.append(Paragraph("Education & Certifications", styles['SectionHeader']))
-    story.append(Paragraph(education_text, styles['Body']))
+    
+    # Education section with proper formatting
+    story.append(Paragraph("<b>BSc (Hons) in Audio Systems Design</b>", styles['Body']))
+    story.append(Paragraph("University of Derby", styles['Body']))
+    story.append(Spacer(1, 8))
+    
+    story.append(Paragraph("<b>Certifications:</b>", styles['Body']))
+    certifications = [
+        "Snowflake SnowPro Core Certified",
+        "Microsoft Certified Azure Fundamentals (AZ-900)",
+        "Python PCAP Certified",
+        "BigQuery Basics (Coursera)",
+        "SAS & PySpark Certificates (Coursera)"
+    ]
+    story.append(ListFlowable(
+        [ListItem(Paragraph(cert, styles['ListItem'])) for cert in certifications],
+        bulletType='bullet'
+    ))
     story.append(Spacer(1, 12))
 
     # RIGHT COLUMN: Skills + Hobbies
     story.append(Paragraph("Skills", styles['SectionHeader']))
-    story.append(Paragraph(", ".join(skills), styles['Body']))
+    # Format skills in a more readable way
+    skills_text = " • ".join(skills)
+    story.append(Paragraph(skills_text, styles['Body']))
     story.append(Spacer(1, 12))
 
     story.append(Paragraph("Hobbies & Interests", styles['SectionHeader']))
-    story.append(Paragraph(hobbies_text, styles['Body']))
+    # Clean up hobbies text for better formatting
+    hobbies_clean = hobbies_text.replace("🎶 ", "").replace("🎾 ", "").replace("🧠 ", "").replace("💡 ", "")
+    story.append(Paragraph(hobbies_clean, styles['Body']))
 
     doc.build(story)
     pdf_buffer.seek(0)
