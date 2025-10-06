@@ -1,5 +1,6 @@
 import streamlit as st
 from io import BytesIO
+from datetime import datetime
 
 # Try to import reportlab, handle gracefully if not available
 try:
@@ -250,7 +251,7 @@ if REPORTLAB_AVAILABLE:
     st.download_button(
         label="📥 Download Antony Best's CV (PDF)",
         data=pdf_buffer,
-        file_name="Antony_Best_Data_Engineer_CV.pdf",
+        file_name=f"Antony_Best_Data_Engineer_CV_{datetime.now().strftime('%Y%m%d')}.pdf",
         mime="application/pdf",
     )
 else:
