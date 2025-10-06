@@ -1,9 +1,16 @@
 import streamlit as st
 from io import BytesIO
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, Paragraph, Spacer, ListFlowable, ListItem
-from reportlab.lib.enums import TA_LEFT
+
+# Try to import reportlab, handle gracefully if not available
+try:
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, Paragraph, Spacer, ListFlowable, ListItem
+    from reportlab.lib.enums import TA_LEFT
+    REPORTLAB_AVAILABLE = True
+except ImportError:
+    REPORTLAB_AVAILABLE = False
+    st.warning("⚠️ PDF generation is not available. Please ensure reportlab is installed.")
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Antony Best | Data Engineer", layout="wide")
@@ -130,59 +137,62 @@ st.write(hobbies_text)
 st.markdown("---")
 
 # --- PDF GENERATION (TWO-COLUMN LAYOUT) ---
-pdf_buffer = BytesIO()
+if REPORTLAB_AVAILABLE:
+    pdf_buffer = BytesIO()
 
-doc = BaseDocTemplate(pdf_buffer, pagesize=A4, leftMargin=40, rightMargin=40, topMargin=40, bottomMargin=40)
-styles = getSampleStyleSheet()
-styles.add(ParagraphStyle(name='SectionHeader', fontSize=13, leading=16, spaceAfter=10, fontName='Helvetica-Bold'))
-styles.add(ParagraphStyle(name='Body', fontSize=10, leading=14))
-styles.add(ParagraphStyle(name='ListItem', fontSize=10, leading=12, leftIndent=15))
+    doc = BaseDocTemplate(pdf_buffer, pagesize=A4, leftMargin=40, rightMargin=40, topMargin=40, bottomMargin=40)
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='SectionHeader', fontSize=13, leading=16, spaceAfter=10, fontName='Helvetica-Bold'))
+    styles.add(ParagraphStyle(name='Body', fontSize=10, leading=14))
+    styles.add(ParagraphStyle(name='ListItem', fontSize=10, leading=12, leftIndent=15))
 
-# Define two-column layout
-frame_left = Frame(doc.leftMargin, doc.bottomMargin, (A4[0] - 100) / 2, A4[1] - 100, id='left')
-frame_right = Frame(doc.leftMargin + (A4[0] / 2), doc.bottomMargin, (A4[0] - 100) / 2, A4[1] - 100, id='right')
-doc.addPageTemplates([PageTemplate(id='TwoCol', frames=[frame_left, frame_right])])
+    # Define two-column layout
+    frame_left = Frame(doc.leftMargin, doc.bottomMargin, (A4[0] - 100) / 2, A4[1] - 100, id='left')
+    frame_right = Frame(doc.leftMargin + (A4[0] / 2), doc.bottomMargin, (A4[0] - 100) / 2, A4[1] - 100, id='right')
+    doc.addPageTemplates([PageTemplate(id='TwoCol', frames=[frame_left, frame_right])])
 
-story = []
+    story = []
 
-# LEFT COLUMN: Summary + Experience + Education
-story.append(Paragraph("Antony Best - Data Engineer", styles['Title']))
-story.append(Paragraph("Email: antony.best@googlemail.com", styles['Body']))
-story.append(Paragraph("Phone: 07891 664159", styles['Body']))
-story.append(Spacer(1, 12))
+    # LEFT COLUMN: Summary + Experience + Education
+    story.append(Paragraph("Antony Best - Data Engineer", styles['Title']))
+    story.append(Paragraph("Email: antony.best@googlemail.com", styles['Body']))
+    story.append(Paragraph("Phone: 07891 664159", styles['Body']))
+    story.append(Spacer(1, 12))
 
-story.append(Paragraph("Professional Summary", styles['SectionHeader']))
-story.append(Paragraph(summary_text, styles['Body']))
-story.append(Spacer(1, 12))
+    story.append(Paragraph("Professional Summary", styles['SectionHeader']))
+    story.append(Paragraph(summary_text, styles['Body']))
+    story.append(Spacer(1, 12))
 
-story.append(Paragraph("Work Experience", styles['SectionHeader']))
-for job in experience:
-    story.append(Paragraph(f"<b>{job['role']}</b>", styles['Body']))
-    story.append(ListFlowable(
-        [ListItem(Paragraph(item, styles['ListItem'])) for item in job["details"]],
-        bulletType='bullet'
-    ))
-    story.append(Spacer(1, 8))
+    story.append(Paragraph("Work Experience", styles['SectionHeader']))
+    for job in experience:
+        story.append(Paragraph(f"<b>{job['role']}</b>", styles['Body']))
+        story.append(ListFlowable(
+            [ListItem(Paragraph(item, styles['ListItem'])) for item in job["details"]],
+            bulletType='bullet'
+        ))
+        story.append(Spacer(1, 8))
 
-story.append(Paragraph("Education & Certifications", styles['SectionHeader']))
-story.append(Paragraph(education_text, styles['Body']))
-story.append(Spacer(1, 12))
+    story.append(Paragraph("Education & Certifications", styles['SectionHeader']))
+    story.append(Paragraph(education_text, styles['Body']))
+    story.append(Spacer(1, 12))
 
-# RIGHT COLUMN: Skills + Hobbies
-story.append(Paragraph("Skills", styles['SectionHeader']))
-story.append(Paragraph(", ".join(skills), styles['Body']))
-story.append(Spacer(1, 12))
+    # RIGHT COLUMN: Skills + Hobbies
+    story.append(Paragraph("Skills", styles['SectionHeader']))
+    story.append(Paragraph(", ".join(skills), styles['Body']))
+    story.append(Spacer(1, 12))
 
-story.append(Paragraph("Hobbies & Interests", styles['SectionHeader']))
-story.append(Paragraph(hobbies_text, styles['Body']))
+    story.append(Paragraph("Hobbies & Interests", styles['SectionHeader']))
+    story.append(Paragraph(hobbies_text, styles['Body']))
 
-doc.build(story)
-pdf_buffer.seek(0)
+    doc.build(story)
+    pdf_buffer.seek(0)
 
-# --- DOWNLOAD BUTTON ---
-st.download_button(
-    label="📥 Download My Two-Column CV (PDF)",
-    data=pdf_buffer,
-    file_name="Antony_Best_TwoColumn_CV.pdf",
-    mime="application/pdf",
-)
+    # --- DOWNLOAD BUTTON ---
+    st.download_button(
+        label="📥 Download My Two-Column CV (PDF)",
+        data=pdf_buffer,
+        file_name="Antony_Best_TwoColumn_CV.pdf",
+        mime="application/pdf",
+    )
+else:
+    st.info("💡 PDF download will be available once the app is deployed with the requirements.txt file.")
