@@ -135,15 +135,18 @@ if REPORTLAB_AVAILABLE:
     doc = BaseDocTemplate(pdf_buffer, pagesize=A4, leftMargin=30, rightMargin=30, topMargin=30, bottomMargin=30)
     styles = getSampleStyleSheet()
     
-    # Optimized styling with good readability
-    styles.add(ParagraphStyle(name='CVTitle', fontSize=16, leading=18, spaceAfter=6, fontName='Helvetica-Bold', textColor='#2c3e50'))
-    styles.add(ParagraphStyle(name='CVSectionHeader', fontSize=12, leading=14, spaceAfter=4, spaceBefore=8, fontName='Helvetica-Bold', textColor='#34495e'))
-    styles.add(ParagraphStyle(name='CVBody', fontSize=9, leading=11, spaceAfter=3, fontName='Helvetica'))
-    styles.add(ParagraphStyle(name='CVListItem', fontSize=9, leading=11, leftIndent=15, fontName='Helvetica'))
-    styles.add(ParagraphStyle(name='CVContact', fontSize=9, leading=10, spaceAfter=4, fontName='Helvetica', textColor='#7f8c8d'))
-    styles.add(ParagraphStyle(name='CVJobTitle', fontSize=10, leading=12, spaceAfter=2, fontName='Helvetica-Bold', textColor='#2c3e50'))
-    styles.add(ParagraphStyle(name='CVCompany', fontSize=9, leading=10, spaceAfter=3, fontName='Helvetica', textColor='#7f8c8d'))
-    styles.add(ParagraphStyle(name='CVSummary', fontSize=9, leading=11, spaceAfter=4, fontName='Helvetica'))
+    # Enhanced professional styling
+    styles.add(ParagraphStyle(name='CVTitle', fontSize=20, leading=24, spaceAfter=8, fontName='Helvetica-Bold', textColor='#1a365d', alignment=1))
+    styles.add(ParagraphStyle(name='CVSubtitle', fontSize=14, leading=16, spaceAfter=12, fontName='Helvetica', textColor='#2d3748', alignment=1))
+    styles.add(ParagraphStyle(name='CVSectionHeader', fontSize=13, leading=16, spaceAfter=6, spaceBefore=12, fontName='Helvetica-Bold', textColor='#2b6cb0', borderWidth=0, borderColor='#2b6cb0', borderPadding=2))
+    styles.add(ParagraphStyle(name='CVBody', fontSize=10, leading=12, spaceAfter=4, fontName='Helvetica', textColor='#2d3748'))
+    styles.add(ParagraphStyle(name='CVListItem', fontSize=9, leading=11, leftIndent=18, fontName='Helvetica', textColor='#4a5568'))
+    styles.add(ParagraphStyle(name='CVContact', fontSize=10, leading=12, spaceAfter=6, fontName='Helvetica', textColor='#718096', alignment=1))
+    styles.add(ParagraphStyle(name='CVJobTitle', fontSize=11, leading=13, spaceAfter=2, fontName='Helvetica-Bold', textColor='#1a365d'))
+    styles.add(ParagraphStyle(name='CVCompany', fontSize=9, leading=11, spaceAfter=4, fontName='Helvetica', textColor='#718096', fontStyle='italic'))
+    styles.add(ParagraphStyle(name='CVSummary', fontSize=9, leading=11, spaceAfter=6, fontName='Helvetica', textColor='#2d3748'))
+    styles.add(ParagraphStyle(name='CVSkills', fontSize=9, leading=11, spaceAfter=4, fontName='Helvetica', textColor='#4a5568'))
+    styles.add(ParagraphStyle(name='CVCert', fontSize=9, leading=11, spaceAfter=2, fontName='Helvetica', textColor='#2d3748'))
 
     # Define two-column layout with more space
     frame_left = Frame(doc.leftMargin, doc.bottomMargin, (A4[0] - 60) / 2, A4[1] - 60, id='left')
@@ -153,10 +156,10 @@ if REPORTLAB_AVAILABLE:
     story = []
 
     # LEFT COLUMN: Summary + Experience + Education
-    story.append(Paragraph("Antony Best", styles['CVTitle']))
-    story.append(Paragraph("Data Engineer", styles['CVSectionHeader']))
-    story.append(Paragraph("📧 antony.best@googlemail.com | 📱 07891 664159", styles['CVContact']))
-    story.append(Spacer(1, 10))
+    story.append(Paragraph("ANTONY BEST", styles['CVTitle']))
+    story.append(Paragraph("Data Engineer", styles['CVSubtitle']))
+    story.append(Paragraph("📧 antony.best@googlemail.com  |  📱 07891 664159", styles['CVContact']))
+    story.append(Spacer(1, 16))
 
     story.append(Paragraph("Professional Summary", styles['CVSectionHeader']))
     story.append(Paragraph(summary_text, styles['CVSummary']))
@@ -186,10 +189,10 @@ if REPORTLAB_AVAILABLE:
     
     # Education section with proper formatting
     story.append(Paragraph("<b>BSc (Hons) in Audio Systems Design</b>", styles['CVBody']))
-    story.append(Paragraph("University of Derby", styles['CVBody']))
-    story.append(Spacer(1, 4))
+    story.append(Paragraph("University of Derby", styles['CVCompany']))
+    story.append(Spacer(1, 6))
     
-    story.append(Paragraph("<b>Certifications:</b>", styles['CVBody']))
+    story.append(Paragraph("<b>Professional Certifications:</b>", styles['CVBody']))
     certifications = [
         "Snowflake SnowPro Core Certified",
         "Microsoft Certified Azure Fundamentals (AZ-900)",
@@ -198,16 +201,26 @@ if REPORTLAB_AVAILABLE:
         "SAS & PySpark Certificates (Coursera)"
     ]
     story.append(ListFlowable(
-        [ListItem(Paragraph(cert, styles['CVListItem'])) for cert in certifications],
+        [ListItem(Paragraph(cert, styles['CVCert'])) for cert in certifications],
         bulletType='bullet'
     ))
     story.append(Spacer(1, 8))
 
     # RIGHT COLUMN: Skills + Additional Experience + Hobbies
-    story.append(Paragraph("Skills", styles['CVSectionHeader']))
-    # Format skills in a more readable way
-    skills_text = " • ".join(skills)
-    story.append(Paragraph(skills_text, styles['CVBody']))
+    story.append(Paragraph("Technical Skills", styles['CVSectionHeader']))
+    # Format skills in categories for better readability
+    core_skills = "Snowflake • dbt • Azure Data Factory • Python • SQL"
+    cloud_skills = "Terraform • Azure Functions • APIM • AWS Glue • Power BI"
+    tools_skills = "Airflow • Databricks • GCP • BigQuery • Git / CI-CD"
+    
+    story.append(Paragraph("<b>Core Technologies:</b>", styles['CVSkills']))
+    story.append(Paragraph(core_skills, styles['CVSkills']))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("<b>Cloud & Tools:</b>", styles['CVSkills']))
+    story.append(Paragraph(cloud_skills, styles['CVSkills']))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("<b>Data Platforms:</b>", styles['CVSkills']))
+    story.append(Paragraph(tools_skills, styles['CVSkills']))
     story.append(Spacer(1, 8))
 
     # Additional Experience section
@@ -225,10 +238,10 @@ if REPORTLAB_AVAILABLE:
     ))
     story.append(Spacer(1, 8))
 
-    story.append(Paragraph("Hobbies & Interests", styles['CVSectionHeader']))
+    story.append(Paragraph("Interests", styles['CVSectionHeader']))
     # Clean up hobbies text for better formatting
     hobbies_clean = hobbies_text.replace("🎶 ", "").replace("🎾 ", "").replace("🧠 ", "").replace("💡 ", "")
-    story.append(Paragraph(hobbies_clean, styles['CVBody']))
+    story.append(Paragraph(hobbies_clean, styles['CVSkills']))
 
     doc.build(story)
     pdf_buffer.seek(0)
@@ -237,7 +250,7 @@ if REPORTLAB_AVAILABLE:
     st.download_button(
         label="📥 Download Antony Best's CV (PDF)",
         data=pdf_buffer,
-        file_name="Antony_Best_TwoColumn_CV.pdf",
+        file_name="Antony_Best_Data_Engineer_CV.pdf",
         mime="application/pdf",
     )
 else:
