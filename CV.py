@@ -75,14 +75,6 @@ experience = [
         ]
     },
     {
-        "role": "Data Engineering / Developer / Tester | Capgemini UK (02/2022 – 01/2023)",
-        "details": [
-            "Migrated SAS solutions to PySpark and BigQuery.",
-            "Used Databricks, Airflow, and GCP for ETL orchestration.",
-            "Implemented AI (GPT3) for code testing and reconciliation.",
-        ]
-    },
-    {
         "role": "Data Analyst | Self Employed (09/2020 – 01/2022)",
         "details": [
             "Analysed CSV data using Python, Pandas, Seaborn, and Matplotlib to visualise insights.",
@@ -211,11 +203,26 @@ if REPORTLAB_AVAILABLE:
     ))
     story.append(Spacer(1, 8))
 
-    # RIGHT COLUMN: Skills + Hobbies
+    # RIGHT COLUMN: Skills + Additional Experience + Hobbies
     story.append(Paragraph("Skills", styles['CVSectionHeader']))
     # Format skills in a more readable way
     skills_text = " • ".join(skills)
     story.append(Paragraph(skills_text, styles['CVBody']))
+    story.append(Spacer(1, 8))
+
+    # Additional Experience section
+    story.append(Paragraph("Additional Experience", styles['CVSectionHeader']))
+    story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
+    story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
+    additional_experience_details = [
+        "Migrated SAS solutions to PySpark and BigQuery.",
+        "Used Databricks, Airflow, and GCP for ETL orchestration.",
+        "Implemented AI (GPT3) for code testing and reconciliation.",
+    ]
+    story.append(ListFlowable(
+        [ListItem(Paragraph(item, styles['CVListItem'])) for item in additional_experience_details],
+        bulletType='bullet'
+    ))
     story.append(Spacer(1, 8))
 
     story.append(Paragraph("Hobbies & Interests", styles['CVSectionHeader']))
@@ -228,7 +235,7 @@ if REPORTLAB_AVAILABLE:
 
     # --- DOWNLOAD BUTTON ---
     st.download_button(
-        label="📥 Download My Two-Column CV (PDF)",
+        label="📥 Download Antony Best's CV (PDF)",
         data=pdf_buffer,
         file_name="Antony_Best_TwoColumn_CV.pdf",
         mime="application/pdf",
