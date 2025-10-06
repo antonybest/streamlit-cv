@@ -144,13 +144,13 @@ if REPORTLAB_AVAILABLE:
     styles = getSampleStyleSheet()
     
     # Enhanced styling for better visual appeal
-    styles.add(ParagraphStyle(name='Title', fontSize=18, leading=22, spaceAfter=12, fontName='Helvetica-Bold', textColor='#2c3e50'))
-    styles.add(ParagraphStyle(name='SectionHeader', fontSize=14, leading=18, spaceAfter=8, spaceBefore=12, fontName='Helvetica-Bold', textColor='#34495e'))
-    styles.add(ParagraphStyle(name='Body', fontSize=10, leading=14, spaceAfter=6, fontName='Helvetica'))
-    styles.add(ParagraphStyle(name='ListItem', fontSize=10, leading=12, leftIndent=20, fontName='Helvetica'))
-    styles.add(ParagraphStyle(name='Contact', fontSize=10, leading=12, spaceAfter=8, fontName='Helvetica', textColor='#7f8c8d'))
-    styles.add(ParagraphStyle(name='JobTitle', fontSize=11, leading=14, spaceAfter=4, fontName='Helvetica-Bold', textColor='#2c3e50'))
-    styles.add(ParagraphStyle(name='Company', fontSize=10, leading=12, spaceAfter=6, fontName='Helvetica', textColor='#7f8c8d'))
+    styles.add(ParagraphStyle(name='CVTitle', fontSize=18, leading=22, spaceAfter=12, fontName='Helvetica-Bold', textColor='#2c3e50'))
+    styles.add(ParagraphStyle(name='CVSectionHeader', fontSize=14, leading=18, spaceAfter=8, spaceBefore=12, fontName='Helvetica-Bold', textColor='#34495e'))
+    styles.add(ParagraphStyle(name='CVBody', fontSize=10, leading=14, spaceAfter=6, fontName='Helvetica'))
+    styles.add(ParagraphStyle(name='CVListItem', fontSize=10, leading=12, leftIndent=20, fontName='Helvetica'))
+    styles.add(ParagraphStyle(name='CVContact', fontSize=10, leading=12, spaceAfter=8, fontName='Helvetica', textColor='#7f8c8d'))
+    styles.add(ParagraphStyle(name='CVJobTitle', fontSize=11, leading=14, spaceAfter=4, fontName='Helvetica-Bold', textColor='#2c3e50'))
+    styles.add(ParagraphStyle(name='CVCompany', fontSize=10, leading=12, spaceAfter=6, fontName='Helvetica', textColor='#7f8c8d'))
 
     # Define two-column layout
     frame_left = Frame(doc.leftMargin, doc.bottomMargin, (A4[0] - 100) / 2, A4[1] - 100, id='left')
@@ -160,17 +160,17 @@ if REPORTLAB_AVAILABLE:
     story = []
 
     # LEFT COLUMN: Summary + Experience + Education
-    story.append(Paragraph("Antony Best", styles['Title']))
-    story.append(Paragraph("Data Engineer", styles['SectionHeader']))
-    story.append(Paragraph("📧 antony.best@googlemail.com", styles['Contact']))
-    story.append(Paragraph("📱 07891 664159", styles['Contact']))
+    story.append(Paragraph("Antony Best", styles['CVTitle']))
+    story.append(Paragraph("Data Engineer", styles['CVSectionHeader']))
+    story.append(Paragraph("📧 antony.best@googlemail.com", styles['CVContact']))
+    story.append(Paragraph("📱 07891 664159", styles['CVContact']))
     story.append(Spacer(1, 16))
 
-    story.append(Paragraph("Professional Summary", styles['SectionHeader']))
-    story.append(Paragraph(summary_text, styles['Body']))
+    story.append(Paragraph("Professional Summary", styles['CVSectionHeader']))
+    story.append(Paragraph(summary_text, styles['CVBody']))
     story.append(Spacer(1, 12))
 
-    story.append(Paragraph("Work Experience", styles['SectionHeader']))
+    story.append(Paragraph("Work Experience", styles['CVSectionHeader']))
     for job in experience:
         # Split role and company/date
         role_parts = job['role'].split(' | ')
@@ -181,23 +181,23 @@ if REPORTLAB_AVAILABLE:
             role_title = job['role']
             company_date = ""
         
-        story.append(Paragraph(role_title, styles['JobTitle']))
+        story.append(Paragraph(role_title, styles['CVJobTitle']))
         if company_date:
-            story.append(Paragraph(company_date, styles['Company']))
+            story.append(Paragraph(company_date, styles['CVCompany']))
         story.append(ListFlowable(
-            [ListItem(Paragraph(item, styles['ListItem'])) for item in job["details"]],
+            [ListItem(Paragraph(item, styles['CVListItem'])) for item in job["details"]],
             bulletType='bullet'
         ))
         story.append(Spacer(1, 10))
 
-    story.append(Paragraph("Education & Certifications", styles['SectionHeader']))
+    story.append(Paragraph("Education & Certifications", styles['CVSectionHeader']))
     
     # Education section with proper formatting
-    story.append(Paragraph("<b>BSc (Hons) in Audio Systems Design</b>", styles['Body']))
-    story.append(Paragraph("University of Derby", styles['Body']))
+    story.append(Paragraph("<b>BSc (Hons) in Audio Systems Design</b>", styles['CVBody']))
+    story.append(Paragraph("University of Derby", styles['CVBody']))
     story.append(Spacer(1, 8))
     
-    story.append(Paragraph("<b>Certifications:</b>", styles['Body']))
+    story.append(Paragraph("<b>Certifications:</b>", styles['CVBody']))
     certifications = [
         "Snowflake SnowPro Core Certified",
         "Microsoft Certified Azure Fundamentals (AZ-900)",
@@ -206,22 +206,22 @@ if REPORTLAB_AVAILABLE:
         "SAS & PySpark Certificates (Coursera)"
     ]
     story.append(ListFlowable(
-        [ListItem(Paragraph(cert, styles['ListItem'])) for cert in certifications],
+        [ListItem(Paragraph(cert, styles['CVListItem'])) for cert in certifications],
         bulletType='bullet'
     ))
     story.append(Spacer(1, 12))
 
     # RIGHT COLUMN: Skills + Hobbies
-    story.append(Paragraph("Skills", styles['SectionHeader']))
+    story.append(Paragraph("Skills", styles['CVSectionHeader']))
     # Format skills in a more readable way
     skills_text = " • ".join(skills)
-    story.append(Paragraph(skills_text, styles['Body']))
+    story.append(Paragraph(skills_text, styles['CVBody']))
     story.append(Spacer(1, 12))
 
-    story.append(Paragraph("Hobbies & Interests", styles['SectionHeader']))
+    story.append(Paragraph("Hobbies & Interests", styles['CVSectionHeader']))
     # Clean up hobbies text for better formatting
     hobbies_clean = hobbies_text.replace("🎶 ", "").replace("🎾 ", "").replace("🧠 ", "").replace("💡 ", "")
-    story.append(Paragraph(hobbies_clean, styles['Body']))
+    story.append(Paragraph(hobbies_clean, styles['CVBody']))
 
     doc.build(story)
     pdf_buffer.seek(0)
