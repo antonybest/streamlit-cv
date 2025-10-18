@@ -272,8 +272,12 @@ if REPORTLAB_AVAILABLE:
     # Filter out roles that go in right column
     left_column_experience = []
     for job in experience:
-        if "Data Engineering / Developer / Tester" not in job['role'] and "Data Analyst" not in job['role']:
+        role_name = job['role']
+        if not role_name.startswith("Data Engineering / Developer / Tester") and not role_name.startswith("Data Analyst"):
             left_column_experience.append(job)
+        else:
+            # Skip this role - it goes in right column
+            pass
     
     for job in left_column_experience:
         # Split role and company/date
