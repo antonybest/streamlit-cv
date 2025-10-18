@@ -301,8 +301,8 @@ if REPORTLAB_AVAILABLE:
         story.append(Spacer(1, 8))
 
     # Force content to right column
-    from reportlab.platypus import NextPageTemplate
-    story.append(NextPageTemplate('TwoCol'))
+    from reportlab.platypus import NextPageTemplate, FrameBreak
+    story.append(FrameBreak())
     
     # Add right column experience
     for job in right_experience:
