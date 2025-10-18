@@ -289,11 +289,30 @@ if REPORTLAB_AVAILABLE:
             # Add spacing for roles without company/date to maintain consistency
             story.append(Spacer(1, 2))
         
+        # Special handling for Data Analyst to ensure it stays with its description
+        if "Data Analyst" in role_title:
+            story.append(Spacer(1, 2))
+        
         story.append(ListFlowable(
             [ListItem(Paragraph(item, styles['CVListItem'])) for item in job["details"]],
             bulletType='bullet'
         ))
         story.append(Spacer(1, 8))
+
+    # Add Data Engineering role to right column
+    story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
+    story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
+    story.append(Spacer(1, 2))
+    data_engineering_details = [
+        "Migrated SAS solutions to PySpark and BigQuery.",
+        "Used Databricks, Airflow, and GCP for ETL orchestration.",
+        "Implemented AI (GPT3) for code testing and reconciliation.",
+    ]
+    story.append(ListFlowable(
+        [ListItem(Paragraph(item, styles['CVListItem'])) for item in data_engineering_details],
+        bulletType='bullet'
+    ))
+    story.append(Spacer(1, 8))
 
     story.append(Paragraph("Education & Certifications", styles['CVSectionHeader']))
     
@@ -317,20 +336,6 @@ if REPORTLAB_AVAILABLE:
     story.append(Spacer(1, 6))
 
     # RIGHT COLUMN: Skills + Additional Experience + Hobbies
-    # Add Data Engineering role to right column
-    story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
-    story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
-    story.append(Spacer(1, 2))
-    data_engineering_details = [
-        "Migrated SAS solutions to PySpark and BigQuery.",
-        "Used Databricks, Airflow, and GCP for ETL orchestration.",
-        "Implemented AI (GPT3) for code testing and reconciliation.",
-    ]
-    story.append(ListFlowable(
-        [ListItem(Paragraph(item, styles['CVListItem'])) for item in data_engineering_details],
-        bulletType='bullet'
-    ))
-    story.append(Spacer(1, 8))
     
     story.append(Paragraph("Technical Skills", styles['CVSectionHeader']))
     # Format skills in categories for better readability with enhanced styling
