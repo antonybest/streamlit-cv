@@ -300,6 +300,10 @@ if REPORTLAB_AVAILABLE:
         ))
         story.append(Spacer(1, 8))
 
+    # Force content to right column
+    from reportlab.platypus import NextPageTemplate
+    story.append(NextPageTemplate('TwoCol'))
+    
     # Add right column experience
     for job in right_experience:
         # Split role and company/date
