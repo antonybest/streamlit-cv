@@ -289,10 +289,6 @@ if REPORTLAB_AVAILABLE:
             # Add spacing for roles without company/date to maintain consistency
             story.append(Spacer(1, 2))
         
-        # Special handling for Data Analyst to ensure it stays with its description
-        if "Data Analyst" in role_title:
-            story.append(Spacer(1, 2))
-        
         story.append(ListFlowable(
             [ListItem(Paragraph(item, styles['CVListItem'])) for item in job["details"]],
             bulletType='bullet'
