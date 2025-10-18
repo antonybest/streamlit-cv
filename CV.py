@@ -128,7 +128,8 @@ st.markdown("---")
 # --- WORK EXPERIENCE ---
 st.markdown('<div class="section-header"><h3>💼 Work Experience</h3></div>', unsafe_allow_html=True)
 
-experience = [
+# Left column experience (for web and PDF left column)
+left_experience = [
     {
         "role": "Lead Business Intelligence Learner Analytics Developer | University of Birmingham UK (04/2024 – Present)",
         "details": [
@@ -163,6 +164,10 @@ experience = [
             "Modelled data from unstructured sources and visualised API calls using Insomnia and DBeaver.",
         ]
     },
+]
+
+# Right column experience (for PDF right column only)
+right_experience = [
     {
         "role": "Data Engineering / Developer / Tester | Capgemini UK (02/2022 – 01/2023)",
         "details": [
@@ -178,6 +183,9 @@ experience = [
         ]
     },
 ]
+
+# Combined experience for web version
+experience = left_experience + right_experience
 
 for job in experience:
     with st.expander(f"💼 {job['role']}"):
@@ -269,17 +277,7 @@ if REPORTLAB_AVAILABLE:
 
     story.append(Paragraph("Work Experience", styles['CVSectionHeader']))
     
-    # Filter out roles that go in right column
-    left_column_experience = []
-    for job in experience:
-        role_name = job['role']
-        if not role_name.startswith("Data Engineering / Developer / Tester") and not role_name.startswith("Data Analyst"):
-            left_column_experience.append(job)
-        else:
-            # Skip this role - it goes in right column
-            pass
-    
-    for job in left_column_experience:
+    for job in left_experience:
         # Split role and company/date
         role_parts = job['role'].split(' | ')
         if len(role_parts) == 2:
@@ -302,33 +300,28 @@ if REPORTLAB_AVAILABLE:
         ))
         story.append(Spacer(1, 8))
 
-    # Add Data Analyst role to right column first
-    story.append(Paragraph("Data Analyst", styles['CVJobTitle']))
-    story.append(Paragraph("Self Employed (09/2020 – 01/2022)", styles['CVCompany']))
-    story.append(Spacer(1, 2))
-    data_analyst_details = [
-        "Analysed CSV data using Python, Pandas, Seaborn, and Matplotlib to visualise insights.",
-    ]
-    story.append(ListFlowable(
-        [ListItem(Paragraph(item, styles['CVListItem'])) for item in data_analyst_details],
-        bulletType='bullet'
-    ))
-    story.append(Spacer(1, 8))
-    
-    # Add Data Engineering role to right column
-    story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
-    story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
-    story.append(Spacer(1, 2))
-    data_engineering_details = [
-        "Migrated SAS solutions to PySpark and BigQuery.",
-        "Used Databricks, Airflow, and GCP for ETL orchestration.",
-        "Implemented AI (GPT3) for code testing and reconciliation.",
-    ]
-    story.append(ListFlowable(
-        [ListItem(Paragraph(item, styles['CVListItem'])) for item in data_engineering_details],
-        bulletType='bullet'
-    ))
-    story.append(Spacer(1, 8))
+    # Add right column experience
+    for job in right_experience:
+        # Split role and company/date
+        role_parts = job['role'].split(' | ')
+        if len(role_parts) == 2:
+            role_title = role_parts[0]
+            company_date = role_parts[1]
+        else:
+            role_title = job['role']
+            company_date = ""
+            
+        story.append(Paragraph(role_title, styles['CVJobTitle']))
+        if company_date:
+            story.append(Paragraph(company_date, styles['CVCompany']))
+        else:
+            story.append(Spacer(1, 2))
+        
+        story.append(ListFlowable(
+            [ListItem(Paragraph(item, styles['CVListItem'])) for item in job["details"]],
+            bulletType='bullet'
+        ))
+        story.append(Spacer(1, 8))
 
     story.append(Paragraph("Education & Certifications", styles['CVSectionHeader']))
     
