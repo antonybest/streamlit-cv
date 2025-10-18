@@ -268,7 +268,11 @@ if REPORTLAB_AVAILABLE:
     story.append(Spacer(1, 8))
 
     story.append(Paragraph("Work Experience", styles['CVSectionHeader']))
-    for job in experience:
+    
+    # Filter out roles that go in right column
+    left_column_experience = [job for job in experience if "Data Engineering / Developer / Tester" not in job['role'] and "Data Analyst" not in job['role']]
+    
+    for job in left_column_experience:
         # Split role and company/date
         role_parts = job['role'].split(' | ')
         if len(role_parts) == 2:
@@ -277,10 +281,6 @@ if REPORTLAB_AVAILABLE:
         else:
             role_title = job['role']
             company_date = ""
-        
-        # Skip Data Engineering and Data Analyst roles - they go in right column
-        if "Data Engineering / Developer / Tester" in role_title or "Data Analyst" in role_title:
-            continue
             
         story.append(Paragraph(role_title, styles['CVJobTitle']))
         if company_date:
