@@ -20,37 +20,38 @@ st.set_page_config(page_title="Antony Best | Data Engineer", layout="wide", init
 st.markdown("""
 <style>
     .main-header {
-        background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+        background: var(--background-color);
         padding: 2rem;
         border-radius: 10px;
-        color: white;
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: 2px solid rgba(59, 130, 246, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid var(--border-color);
+        border-top: 4px solid #10b981;
     }
     .main-header h1 {
-        color: white !important;
+        color: var(--text-color) !important;
         font-size: 3rem;
         margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        font-weight: 700;
     }
     .main-header h2 {
-        color: #e2e8f0 !important;
+        color: var(--secondary-text-color) !important;
         font-size: 1.5rem;
         margin-bottom: 1rem;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        font-weight: 400;
     }
     .contact-info {
-        color: #cbd5e1 !important;
+        color: var(--secondary-text-color) !important;
         font-size: 1.1rem;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
     }
     
     /* Section headers that adapt to theme */
     .section-header {
         padding: 0.5rem 1rem;
-        border-left: 4px solid #3b82f6;
+        border-left: 4px solid #10b981;
         border-radius: 5px;
         margin: 1rem 0;
         background-color: var(--background-color);
@@ -70,7 +71,7 @@ st.markdown("""
     }
     
     .skill-badge {
-        background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+        background: linear-gradient(45deg, #10b981, #059669);
         color: white;
         padding: 0.3rem 0.8rem;
         border-radius: 20px;
@@ -84,7 +85,7 @@ st.markdown("""
         background: var(--background-color);
         padding: 1rem;
         border-radius: 8px;
-        border-left: 4px solid #3b82f6;
+        border-left: 4px solid #10b981;
         margin: 0.5rem 0;
         border: 1px solid var(--border-color);
     }
@@ -109,17 +110,17 @@ st.markdown("""
 # --- PROFESSIONAL SUMMARY ---
 st.markdown('<div class="section-header"><h3>📋 Professional Summary</h3></div>', unsafe_allow_html=True)
 summary_text = """
-I specialise in building complex data pipelines that transform raw educational data into actionable business intelligence, 
-working extensively with **Snowflake** and **dbt** to create a multi-layered data architecture. 
+I specialise in architecting and building robust data systems and pipelines that transform raw data into actionable business intelligence, 
+working extensively with **Snowflake**, **Azure Data Factory**, and **dbt** to create scalable data architectures. 
 
-My technical expertise includes designing sophisticated intermediate models that handle complex joins across student information systems, 
-learning management platforms, and video analytics data, ensuring data quality and performance optimisation.
+My technical expertise includes designing sophisticated data models using star and snowflake schemas, implementing ETL/ELT processes, 
+and integrating AI/ML platforms including **Snowflake AI Cortex** and **Azure OpenAI** for advanced analytics and automation.
 
-I implement advanced SQL techniques, including window functions and data aggregation strategies, and hold certifications in 
-**Snowflake SnowPro** and **Azure AZ-900**, demonstrating a commitment to continuous learning. 
+I implement advanced SQL techniques and Python programming for data engineering, with strong experience in cloud data warehouses (AWS, Azure, GCP), 
+and hold certifications in **Snowflake SnowPro** and **Azure AZ-900**. I'm proficient in MLOps practices, agile methodologies, and CI/CD processes.
 
-Additionally, I develop and maintain comprehensive data models that support real-time analytics dashboards and API endpoints, 
-enabling stakeholders to access critical insights for student success and institutional decision-making.
+Additionally, I develop comprehensive data models that support real-time analytics dashboards and API endpoints, 
+enabling stakeholders to access critical insights for data-driven decision-making across diverse business environments.
 """
 st.write(summary_text)
 st.markdown("---")
@@ -133,9 +134,11 @@ experience = [
         "details": [
             "Designed, built, and optimised end-to-end data platforms using Snowflake, Azure Data Factory, and dbt.",
             "Delivered scalable ELT solutions integrating multiple data systems into a unified warehouse.",
-            "Built Azure Functions integrating with APIM APIs for cloud-native automation.",
-            "Proficient in Python, SQL, Terraform, CI/CD, and version control.",
+            "Built Azure Functions integrating with APIM APIs for cloud-native automation and AI integration.",
+            "Implemented Snowflake AI Cortex for advanced analytics, built AI agents, and integrated Snowflake AI API into Azure Functions.",
+            "Proficient in Python, SQL, Terraform, CI/CD, and version control with agile methodologies.",
             "Collaborated with architects, analysts, and stakeholders to deliver data strategies aligned with business goals.",
+            "Used Jira for project management and daily scrum calls in agile development environment.",
         ]
     },
     {
@@ -143,6 +146,7 @@ experience = [
         "details": [
             "Processed XML data in AWS Glue, loading structured data into AWS and metadata into Snowflake.",
             "Developed Python scripts for file validation, batch IDs, and Snowflake integration.",
+            "Used Apache Airflow for ETL orchestration and workflow management.",
         ]
     },
     {
@@ -186,7 +190,8 @@ st.markdown("---")
 skills = [
     "Snowflake", "dbt", "Azure Data Factory", "Python", "SQL",
     "Terraform", "Azure Functions", "APIM", "AWS Glue", "Power BI",
-    "Airflow", "Databricks", "GCP", "BigQuery", "Git / CI-CD"
+    "Airflow", "Databricks", "GCP", "BigQuery", "Git / CI-CD",
+    "Snowflake AI Cortex", "Jira", "Agile"
 ]
 
 st.markdown('<div class="section-header"><h3>🛠️ Technical Skills</h3></div>', unsafe_allow_html=True)
@@ -309,6 +314,7 @@ if REPORTLAB_AVAILABLE:
     core_skills = "Snowflake • dbt • Azure Data Factory • Python • SQL"
     cloud_skills = "Terraform • Azure Functions • APIM • AWS Glue • Power BI"
     tools_skills = "Airflow • Databricks • GCP • BigQuery • Git / CI-CD"
+    ai_skills = "Snowflake AI Cortex • Azure OpenAI • Jira • Agile • MLOps"
     
     story.append(Paragraph("Core Technologies:", styles['CVSkillsHeader']))
     story.append(Paragraph(core_skills, styles['CVSkills']))
@@ -318,6 +324,9 @@ if REPORTLAB_AVAILABLE:
     story.append(Spacer(1, 3))
     story.append(Paragraph("Data Platforms:", styles['CVSkillsHeader']))
     story.append(Paragraph(tools_skills, styles['CVSkills']))
+    story.append(Spacer(1, 3))
+    story.append(Paragraph("AI & Methodologies:", styles['CVSkillsHeader']))
+    story.append(Paragraph(ai_skills, styles['CVSkills']))
     story.append(Spacer(1, 6))
 
 
