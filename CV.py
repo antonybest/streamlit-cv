@@ -278,6 +278,10 @@ if REPORTLAB_AVAILABLE:
             role_title = job['role']
             company_date = ""
         
+        # Skip Data Engineering role - it goes in right column
+        if "Data Engineering / Developer / Tester" in role_title:
+            continue
+            
         story.append(Paragraph(role_title, styles['CVJobTitle']))
         if company_date:
             story.append(Paragraph(company_date, styles['CVCompany']))
@@ -313,6 +317,21 @@ if REPORTLAB_AVAILABLE:
     story.append(Spacer(1, 6))
 
     # RIGHT COLUMN: Skills + Additional Experience + Hobbies
+    # Add Data Engineering role to right column
+    story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
+    story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
+    story.append(Spacer(1, 2))
+    data_engineering_details = [
+        "Migrated SAS solutions to PySpark and BigQuery.",
+        "Used Databricks, Airflow, and GCP for ETL orchestration.",
+        "Implemented AI (GPT3) for code testing and reconciliation.",
+    ]
+    story.append(ListFlowable(
+        [ListItem(Paragraph(item, styles['CVListItem'])) for item in data_engineering_details],
+        bulletType='bullet'
+    ))
+    story.append(Spacer(1, 8))
+    
     story.append(Paragraph("Technical Skills", styles['CVSectionHeader']))
     # Format skills in categories for better readability with enhanced styling
     core_skills = "Snowflake • dbt • Azure Data Factory • Python • SQL"
