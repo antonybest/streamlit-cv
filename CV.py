@@ -16,7 +16,7 @@ except ImportError:
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Antony Best | Data Engineer", layout="wide", initial_sidebar_state="collapsed")
 
-# Custom CSS for enhanced styling
+# Custom CSS for enhanced styling with dark/light mode support
 st.markdown("""
 <style>
     .main-header {
@@ -27,28 +27,48 @@ st.markdown("""
         text-align: center;
         margin-bottom: 2rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 2px solid rgba(59, 130, 246, 0.3);
     }
     .main-header h1 {
         color: white !important;
         font-size: 3rem;
         margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
     .main-header h2 {
         color: #e2e8f0 !important;
         font-size: 1.5rem;
         margin-bottom: 1rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
     .contact-info {
         color: #cbd5e1 !important;
         font-size: 1.1rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
+    
+    /* Section headers that adapt to theme */
     .section-header {
-        background: linear-gradient(90deg, #f8fafc 0%, #e2e8f0 100%);
         padding: 0.5rem 1rem;
         border-left: 4px solid #3b82f6;
         border-radius: 5px;
         margin: 1rem 0;
+        background-color: var(--background-color);
+        border: 1px solid var(--border-color);
     }
+    
+    /* Light mode section headers */
+    [data-theme="light"] .section-header {
+        background: linear-gradient(90deg, #f8fafc 0%, #e2e8f0 100%);
+        color: #1a202c;
+    }
+    
+    /* Dark mode section headers */
+    [data-theme="dark"] .section-header {
+        background: linear-gradient(90deg, #2d3748 0%, #4a5568 100%);
+        color: #e2e8f0;
+    }
+    
     .skill-badge {
         background: linear-gradient(45deg, #3b82f6, #1d4ed8);
         color: white;
@@ -57,13 +77,22 @@ st.markdown("""
         font-size: 0.9rem;
         margin: 0.2rem;
         display: inline-block;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+    
     .experience-card {
-        background: #f8fafc;
+        background: var(--background-color);
         padding: 1rem;
         border-radius: 8px;
         border-left: 4px solid #3b82f6;
         margin: 0.5rem 0;
+        border: 1px solid var(--border-color);
+    }
+    
+    /* Ensure text is visible in both themes */
+    .section-header h3 {
+        color: inherit !important;
+        margin: 0;
     }
 </style>
 """, unsafe_allow_html=True)
