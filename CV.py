@@ -270,7 +270,10 @@ if REPORTLAB_AVAILABLE:
     story.append(Paragraph("Work Experience", styles['CVSectionHeader']))
     
     # Filter out roles that go in right column
-    left_column_experience = [job for job in experience if "Data Engineering / Developer / Tester" not in job['role'] and "Data Analyst" not in job['role']]
+    left_column_experience = []
+    for job in experience:
+        if "Data Engineering / Developer / Tester" not in job['role'] and "Data Analyst" not in job['role']:
+            left_column_experience.append(job)
     
     for job in left_column_experience:
         # Split role and company/date
