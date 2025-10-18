@@ -14,16 +14,71 @@ except ImportError:
     st.warning("⚠️ PDF generation is not available. Please ensure reportlab is installed.")
 
 # --- PAGE CONFIG ---
-st.set_page_config(page_title="Antony Best | Data Engineer", layout="wide")
+st.set_page_config(page_title="Antony Best | Data Engineer", layout="wide", initial_sidebar_state="collapsed")
 
-# --- HEADER ---
-st.title("👨🏾‍💻 Antony Best")
-st.subheader("Data Engineer")
-st.write("📧 antony.best@googlemail.com | 📱 07891 664159")
-st.markdown("---")
+# Custom CSS for enhanced styling
+st.markdown("""
+<style>
+    .main-header {
+        background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+        padding: 2rem;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-header h1 {
+        color: white !important;
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+    .main-header h2 {
+        color: #e2e8f0 !important;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .contact-info {
+        color: #cbd5e1 !important;
+        font-size: 1.1rem;
+    }
+    .section-header {
+        background: linear-gradient(90deg, #f8fafc 0%, #e2e8f0 100%);
+        padding: 0.5rem 1rem;
+        border-left: 4px solid #3b82f6;
+        border-radius: 5px;
+        margin: 1rem 0;
+    }
+    .skill-badge {
+        background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin: 0.2rem;
+        display: inline-block;
+    }
+    .experience-card {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #3b82f6;
+        margin: 0.5rem 0;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- ENHANCED HEADER ---
+st.markdown("""
+<div class="main-header">
+    <h1>👨🏾‍💻 Antony Best</h1>
+    <h2>Data Engineer</h2>
+    <div class="contact-info">📧 antony.best@googlemail.com | 📱 07891 664159</div>
+</div>
+""", unsafe_allow_html=True)
 
 # --- PROFESSIONAL SUMMARY ---
-st.header("Professional Summary")
+st.markdown('<div class="section-header"><h3>📋 Professional Summary</h3></div>', unsafe_allow_html=True)
 summary_text = """
 I specialise in building complex data pipelines that transform raw educational data into actionable business intelligence, 
 working extensively with **Snowflake** and **dbt** to create a multi-layered data architecture. 
@@ -41,7 +96,7 @@ st.write(summary_text)
 st.markdown("---")
 
 # --- WORK EXPERIENCE ---
-st.header("Work Experience")
+st.markdown('<div class="section-header"><h3>💼 Work Experience</h3></div>', unsafe_allow_html=True)
 
 experience = [
     {
@@ -76,6 +131,14 @@ experience = [
         ]
     },
     {
+        "role": "Data Engineering / Developer / Tester | Capgemini UK (02/2022 – 01/2023)",
+        "details": [
+            "Migrated SAS solutions to PySpark and BigQuery.",
+            "Used Databricks, Airflow, and GCP for ETL orchestration.",
+            "Implemented AI (GPT3) for code testing and reconciliation.",
+        ]
+    },
+    {
         "role": "Data Analyst | Self Employed (09/2020 – 01/2022)",
         "details": [
             "Analysed CSV data using Python, Pandas, Seaborn, and Matplotlib to visualise insights.",
@@ -96,14 +159,20 @@ skills = [
     "Terraform", "Azure Functions", "APIM", "AWS Glue", "Power BI",
     "Airflow", "Databricks", "GCP", "BigQuery", "Git / CI-CD"
 ]
-st.header("Skills")
-cols = st.columns(4)
-for i, skill in enumerate(skills):
-    with cols[i % 4]:
-        st.markdown(f"- {skill}")
+
+st.markdown('<div class="section-header"><h3>🛠️ Technical Skills</h3></div>', unsafe_allow_html=True)
+
+# Create skill badges
+skill_html = ""
+for skill in skills:
+    skill_html += f'<span class="skill-badge">{skill}</span>'
+
+st.markdown(skill_html, unsafe_allow_html=True)
 st.markdown("---")
 
 # --- EDUCATION & CERTIFICATIONS ---
+st.markdown('<div class="section-header"><h3>🎓 Education & Certifications</h3></div>', unsafe_allow_html=True)
+
 education_text = """
 🎓 **BSc (Hons) in Audio Systems Design**, University of Derby  
 
@@ -114,18 +183,15 @@ education_text = """
 - BigQuery Basics (Coursera)  
 - SAS & PySpark Certificates (Coursera)
 """
-st.header("Education & Certifications")
 st.write(education_text)
 st.markdown("---")
 
-# --- HOBBIES ---
 hobbies_text = """
 🎶 Music  
 🎾 Tennis  
 🧠 Learning new skills and AI technologies  
 💡 Exploring new data tools and innovations
 """
-st.header("Hobbies & Interests")
 st.write(hobbies_text)
 st.markdown("---")
 
@@ -136,18 +202,19 @@ if REPORTLAB_AVAILABLE:
     doc = BaseDocTemplate(pdf_buffer, pagesize=A4, leftMargin=30, rightMargin=30, topMargin=30, bottomMargin=30)
     styles = getSampleStyleSheet()
     
-    # Enhanced professional styling
-    styles.add(ParagraphStyle(name='CVTitle', fontSize=20, leading=24, spaceAfter=8, fontName='Helvetica-Bold', textColor='#1a365d', alignment=1))
-    styles.add(ParagraphStyle(name='CVSubtitle', fontSize=14, leading=16, spaceAfter=12, fontName='Helvetica', textColor='#2d3748', alignment=1))
-    styles.add(ParagraphStyle(name='CVSectionHeader', fontSize=13, leading=16, spaceAfter=6, spaceBefore=12, fontName='Helvetica-Bold', textColor='#2b6cb0', borderWidth=0, borderColor='#2b6cb0', borderPadding=2))
-    styles.add(ParagraphStyle(name='CVBody', fontSize=10, leading=12, spaceAfter=4, fontName='Helvetica', textColor='#2d3748'))
-    styles.add(ParagraphStyle(name='CVListItem', fontSize=9, leading=11, leftIndent=18, fontName='Helvetica', textColor='#4a5568'))
-    styles.add(ParagraphStyle(name='CVContact', fontSize=10, leading=12, spaceAfter=6, fontName='Helvetica', textColor='#718096', alignment=1))
-    styles.add(ParagraphStyle(name='CVJobTitle', fontSize=11, leading=13, spaceAfter=2, fontName='Helvetica-Bold', textColor='#1a365d'))
-    styles.add(ParagraphStyle(name='CVCompany', fontSize=9, leading=11, spaceAfter=4, fontName='Helvetica', textColor='#718096', fontStyle='italic'))
-    styles.add(ParagraphStyle(name='CVSummary', fontSize=9, leading=11, spaceAfter=6, fontName='Helvetica', textColor='#2d3748'))
-    styles.add(ParagraphStyle(name='CVSkills', fontSize=9, leading=11, spaceAfter=4, fontName='Helvetica', textColor='#4a5568'))
-    styles.add(ParagraphStyle(name='CVCert', fontSize=9, leading=11, spaceAfter=2, fontName='Helvetica', textColor='#2d3748'))
+    # Enhanced professional styling with modern colors and better typography
+    styles.add(ParagraphStyle(name='CVTitle', fontSize=22, leading=26, spaceAfter=6, fontName='Helvetica-Bold', textColor='#1a365d', alignment=1))
+    styles.add(ParagraphStyle(name='CVSubtitle', fontSize=15, leading=17, spaceAfter=10, fontName='Helvetica', textColor='#2d3748', alignment=1))
+    styles.add(ParagraphStyle(name='CVSectionHeader', fontSize=12, leading=14, spaceAfter=4, spaceBefore=10, fontName='Helvetica-Bold', textColor='#2b6cb0', borderWidth=1, borderColor='#2b6cb0', borderPadding=3, backColor='#f7fafc'))
+    styles.add(ParagraphStyle(name='CVBody', fontSize=9, leading=11, spaceAfter=3, fontName='Helvetica', textColor='#2d3748'))
+    styles.add(ParagraphStyle(name='CVListItem', fontSize=8, leading=10, leftIndent=15, fontName='Helvetica', textColor='#4a5568'))
+    styles.add(ParagraphStyle(name='CVContact', fontSize=9, leading=11, spaceAfter=8, fontName='Helvetica', textColor='#718096', alignment=1))
+    styles.add(ParagraphStyle(name='CVJobTitle', fontSize=10, leading=12, spaceAfter=1, fontName='Helvetica-Bold', textColor='#1a365d'))
+    styles.add(ParagraphStyle(name='CVCompany', fontSize=8, leading=10, spaceAfter=3, fontName='Helvetica', textColor='#718096', fontStyle='italic'))
+    styles.add(ParagraphStyle(name='CVSummary', fontSize=8, leading=10, spaceAfter=5, fontName='Helvetica', textColor='#2d3748'))
+    styles.add(ParagraphStyle(name='CVSkills', fontSize=8, leading=10, spaceAfter=3, fontName='Helvetica', textColor='#4a5568'))
+    styles.add(ParagraphStyle(name='CVCert', fontSize=8, leading=10, spaceAfter=1, fontName='Helvetica', textColor='#2d3748'))
+    styles.add(ParagraphStyle(name='CVSkillsHeader', fontSize=9, leading=11, spaceAfter=2, fontName='Helvetica-Bold', textColor='#1a365d'))
 
     # Define two-column layout with more space
     frame_left = Frame(doc.leftMargin, doc.bottomMargin, (A4[0] - 60) / 2, A4[1] - 60, id='left')
@@ -188,12 +255,12 @@ if REPORTLAB_AVAILABLE:
 
     story.append(Paragraph("Education & Certifications", styles['CVSectionHeader']))
     
-    # Education section with proper formatting
-    story.append(Paragraph("<b>BSc (Hons) in Audio Systems Design</b>", styles['CVBody']))
+    # Education section with enhanced formatting
+    story.append(Paragraph("BSc (Hons) in Audio Systems Design", styles['CVJobTitle']))
     story.append(Paragraph("University of Derby", styles['CVCompany']))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 4))
     
-    story.append(Paragraph("<b>Professional Certifications:</b>", styles['CVBody']))
+    story.append(Paragraph("Professional Certifications:", styles['CVSkillsHeader']))
     certifications = [
         "Snowflake SnowPro Core Certified",
         "Microsoft Certified Azure Fundamentals (AZ-900)",
@@ -205,39 +272,25 @@ if REPORTLAB_AVAILABLE:
         [ListItem(Paragraph(cert, styles['CVCert'])) for cert in certifications],
         bulletType='bullet'
     ))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 6))
 
     # RIGHT COLUMN: Skills + Additional Experience + Hobbies
     story.append(Paragraph("Technical Skills", styles['CVSectionHeader']))
-    # Format skills in categories for better readability
+    # Format skills in categories for better readability with enhanced styling
     core_skills = "Snowflake • dbt • Azure Data Factory • Python • SQL"
     cloud_skills = "Terraform • Azure Functions • APIM • AWS Glue • Power BI"
     tools_skills = "Airflow • Databricks • GCP • BigQuery • Git / CI-CD"
     
-    story.append(Paragraph("<b>Core Technologies:</b>", styles['CVSkills']))
+    story.append(Paragraph("Core Technologies:", styles['CVSkillsHeader']))
     story.append(Paragraph(core_skills, styles['CVSkills']))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("<b>Cloud & Tools:</b>", styles['CVSkills']))
+    story.append(Spacer(1, 3))
+    story.append(Paragraph("Cloud & Tools:", styles['CVSkillsHeader']))
     story.append(Paragraph(cloud_skills, styles['CVSkills']))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("<b>Data Platforms:</b>", styles['CVSkills']))
+    story.append(Spacer(1, 3))
+    story.append(Paragraph("Data Platforms:", styles['CVSkillsHeader']))
     story.append(Paragraph(tools_skills, styles['CVSkills']))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 6))
 
-    # Additional Experience section
-    story.append(Paragraph("Additional Experience", styles['CVSectionHeader']))
-    story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
-    story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
-    additional_experience_details = [
-        "Migrated SAS solutions to PySpark and BigQuery.",
-        "Used Databricks, Airflow, and GCP for ETL orchestration.",
-        "Implemented AI (GPT3) for code testing and reconciliation.",
-    ]
-    story.append(ListFlowable(
-        [ListItem(Paragraph(item, styles['CVListItem'])) for item in additional_experience_details],
-        bulletType='bullet'
-    ))
-    story.append(Spacer(1, 8))
 
     story.append(Paragraph("Interests", styles['CVSectionHeader']))
     # Clean up hobbies text for better formatting
