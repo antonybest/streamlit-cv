@@ -278,8 +278,8 @@ if REPORTLAB_AVAILABLE:
             role_title = job['role']
             company_date = ""
         
-        # Skip Data Engineering role - it goes in right column
-        if "Data Engineering / Developer / Tester" in role_title:
+        # Skip Data Engineering and Data Analyst roles - they go in right column
+        if "Data Engineering / Developer / Tester" in role_title or "Data Analyst" in role_title:
             continue
             
         story.append(Paragraph(role_title, styles['CVJobTitle']))
@@ -299,6 +299,19 @@ if REPORTLAB_AVAILABLE:
         ))
         story.append(Spacer(1, 8))
 
+    # Add Data Analyst role to right column first
+    story.append(Paragraph("Data Analyst", styles['CVJobTitle']))
+    story.append(Paragraph("Self Employed (09/2020 – 01/2022)", styles['CVCompany']))
+    story.append(Spacer(1, 2))
+    data_analyst_details = [
+        "Analysed CSV data using Python, Pandas, Seaborn, and Matplotlib to visualise insights.",
+    ]
+    story.append(ListFlowable(
+        [ListItem(Paragraph(item, styles['CVListItem'])) for item in data_analyst_details],
+        bulletType='bullet'
+    ))
+    story.append(Spacer(1, 8))
+    
     # Add Data Engineering role to right column
     story.append(Paragraph("Data Engineering / Developer / Tester", styles['CVJobTitle']))
     story.append(Paragraph("Capgemini UK (02/2022 – 01/2023)", styles['CVCompany']))
