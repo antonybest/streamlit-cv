@@ -281,6 +281,11 @@ if REPORTLAB_AVAILABLE:
         story.append(Paragraph(role_title, styles['CVJobTitle']))
         if company_date:
             story.append(Paragraph(company_date, styles['CVCompany']))
+        
+        # Add extra spacing before bullet points for Data Engineering role
+        if "Data Engineering / Developer / Tester" in role_title:
+            story.append(Spacer(1, 4))
+        
         story.append(ListFlowable(
             [ListItem(Paragraph(item, styles['CVListItem'])) for item in job["details"]],
             bulletType='bullet'
@@ -314,7 +319,7 @@ if REPORTLAB_AVAILABLE:
     core_skills = "Snowflake • dbt • Azure Data Factory • Python • SQL"
     cloud_skills = "Terraform • Azure Functions • APIM • AWS Glue • Power BI"
     tools_skills = "Airflow • Databricks • GCP • BigQuery • Git / CI-CD"
-    ai_skills = "Snowflake AI Cortex • Azure OpenAI • Jira • Agile • MLOps"
+    ai_skills = "Snowflake AI Cortex • Jira • Agile"
     
     story.append(Paragraph("Core Technologies:", styles['CVSkillsHeader']))
     story.append(Paragraph(core_skills, styles['CVSkills']))
