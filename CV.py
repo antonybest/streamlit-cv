@@ -281,10 +281,9 @@ if REPORTLAB_AVAILABLE:
         story.append(Paragraph(role_title, styles['CVJobTitle']))
         if company_date:
             story.append(Paragraph(company_date, styles['CVCompany']))
-        
-        # Add extra spacing before bullet points for Data Engineering role
-        if "Data Engineering / Developer / Tester" in role_title:
-            story.append(Spacer(1, 4))
+        else:
+            # Add spacing for roles without company/date to maintain consistency
+            story.append(Spacer(1, 2))
         
         story.append(ListFlowable(
             [ListItem(Paragraph(item, styles['CVListItem'])) for item in job["details"]],
